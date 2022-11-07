@@ -2,9 +2,8 @@ package controllers
 
 import (
   "net/http"
-
   "github.com/gin-gonic/gin"
-  "github.com/sachin979/todo/models"
+  "todo/models"
 )
 
 // Get all todos

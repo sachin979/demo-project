@@ -1,23 +1,57 @@
 package main
 
 import (
-"github.com/gin-gonic/gin"
-"github.com/sachin979/todo/models"
-"github.com/sachin979/todo/controller"
+	"log"
+	// "fmt"
+	"todo/config"
+	"todo/connectors"
+	"todo/repos"
+	"todo/routes"
+	"todo/services"
+	// "todo/connectors"
+	"github.com/gin-gonic/gin"
+	"todo/models"
+	// "todo/controller"
+	// "gorm.io/driver/mysql"
+	// "gorm.io/gorm"
+	// gosql "github.com/go-sql-driver/mysql"
 )
 
 func main() {
-  r := gin.Default()
 
-  models.ConnectDatabase() 
+	cfg := config.AppConfigF()
 
-  r.GET("/todos", controllers.FindTodos)
-  r.POST("/todos", controllers.CreateTodo)
-  r.GET("/todo/:id", controllers.FindTodo)
-  r.PATCH("/todo/:id", controllers.UpdateTodo) 
-  r.PUT("/todo/:id", controllers.UpdateTodo)
-  r.DELETE("/todo/:id", controllers.DeleteTodo)
+	log.Println("Starting server...")
 
+	dbs, err := database.New(cfg)
 
-  r.Run()
+	if err != nil {
+		log.Fatalf("Unable to initialize data sources: %v\n", err)
+	}
+
+	router := gin.Default() //Init Router
+
+	appConfig := config.AppConfig{
+		Router: router,
+		Dbs:    dbs,
+		Cfg:    cfg,
+	}
+
+	todoRepo := repos.TodoRepo{
+		DB: appConfig.Dbs.DB,
+	}
+
+	models.ConnectDatabase()
+
+	TodoService := services.NewService(services.ServiceConfig{
+		TodoRepo: todoRepo,
+	})
+
+	routes.InitRoutes(config.HandlerConfig{
+		R:           appConfig.Router,
+		TodoService: TodoService,
+	})
+
+	router.Run(":" + cfg.Server.Port)
+
 }
