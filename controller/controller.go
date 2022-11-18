@@ -7,7 +7,6 @@ import (
 	"strings"
 	"todo/models"
 	"todo/services"
-
 	"github.com/gin-gonic/gin"
 )
 type Handler struct {
@@ -29,7 +28,6 @@ func (h *Handler) ListTodos(c *gin.Context) {
 }
 
 func (h *Handler) CreateTodo(c *gin.Context) {
-
 	var form models.CreateTodoInput
 	c.Bind(&form)
 	fmt.Println(form)
@@ -44,7 +42,6 @@ func (h *Handler) CreateTodo(c *gin.Context) {
 			return
 		}
 	}
-
 	c.JSON(201, gin.H{"data": todo})
 
 }
@@ -70,7 +67,6 @@ func (h *Handler) PutTodo(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(200, gin.H{"data": todo})
 }
 
@@ -83,18 +79,15 @@ func (h *Handler) PatchTodo(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(200, gin.H{"data": todoDto})
 }
 
 func (h *Handler) DeleteTodo(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-
 	todo, err := h.TodoService.Delete(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(200, gin.H{"data": todo})
 }

@@ -3,7 +3,6 @@ package config
 import (
 	"log"
 	"todo/services"
-
 	"github.com/gin-gonic/gin"
 	"github.com/joeshaw/envdecode"
 	"github.com/joho/godotenv"

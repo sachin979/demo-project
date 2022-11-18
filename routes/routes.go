@@ -10,9 +10,7 @@ func InitRoutes(c config.HandlerConfig) {
 	h := controllers.Handler{
 		TodoService: c.TodoService,
 	}
-
 	const todoIdurl = "/todo/:id"
-
 	g := c.R
 
 	g.GET("/todos", h.ListTodos)
@@ -21,5 +19,4 @@ func InitRoutes(c config.HandlerConfig) {
 	g.PUT(todoIdurl, h.PutTodo)
 	g.PATCH(todoIdurl, h.PatchTodo)
 	g.DELETE(todoIdurl, h.DeleteTodo)
-
 }

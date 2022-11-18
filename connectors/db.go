@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"todo/config"
-
 	gosql "github.com/go-sql-driver/mysql"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
