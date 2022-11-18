@@ -13,7 +13,6 @@ func InitRoutes(c config.HandlerConfig) {
 
 	const todoIdurl = "/todo/:id"
 
-	//Set api group
 	g := c.R
 
 	g.GET("/todos", h.ListTodos)

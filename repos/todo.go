@@ -2,7 +2,8 @@ package repos
 
 import (
 	// "log"
-	 "todo/models"
+	"todo/models"
+
 	"gorm.io/gorm"
 )
 
@@ -12,24 +13,22 @@ type TodoRepo struct {
 	DB *gorm.DB
 }
 
-
 func NewTodoRepo(db *gorm.DB) TodoRepo {
-	return TodoRepo {
+	return TodoRepo{
 		DB: db,
 	}
 }
 
 type ITodoRepo interface {
-	List( filters models.TodoFilterList) (models.Todos, error)
+	List(filters models.TodoFilterList) (models.Todos, error)
 	Add(todo *models.Todo) (*models.Todo, error)
-	Get(id int) (*models.Todo, error) 
-	Put(form *models.PutTodoInput, id int) (*models.Todo, error) 
+	Get(id int) (*models.Todo, error)
+	Put(form *models.PutTodoInput, id int) (*models.Todo, error)
 	Patch(form *models.PatchTodoInput, id int) (*models.Todo, error)
-	 Delete(id int) (*models.Todo, error)
+	Delete(id int) (*models.Todo, error)
 }
 
-
-func (r TodoRepo) List(filters models.TodoFilterList) (models.Todos,  error) {
+func (r TodoRepo) List(filters models.TodoFilterList) (models.Todos, error) {
 	todos := make([]*models.Todo, 0)
 
 	db := models.DB.Find(&todos)
@@ -37,7 +36,6 @@ func (r TodoRepo) List(filters models.TodoFilterList) (models.Todos,  error) {
 	if len(filters.Status) > 0 {
 		db = db.Where("status = ?", filters.Status)
 	}
-
 
 	err := db.Find(&todos).Error
 
@@ -63,7 +61,7 @@ func (r TodoRepo) Add(todo *models.Todo) (*models.Todo, error) {
 
 func (r TodoRepo) Get(id int) (*models.Todo, error) {
 	todo := new(models.Todo)
-	err := models.DB.Where("id = ?",id).First(&todo).Error
+	err := models.DB.Where("id = ?", id).First(&todo).Error
 
 	if err != nil {
 		return nil, err
@@ -86,7 +84,6 @@ func (r TodoRepo) Put(form *models.PutTodoInput, id int) (*models.Todo, error) {
 	return todo, nil
 }
 
-
 func (r TodoRepo) Patch(form *models.PatchTodoInput, id int) (*models.Todo, error) {
 	todo, err := form.ToPatchModel()
 
@@ -108,4 +105,3 @@ func (r TodoRepo) Delete(id int) (*models.Todo, error) {
 	}
 	return todo, nil
 }
-

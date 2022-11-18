@@ -2,38 +2,38 @@ package models
 
 import (
 	"fmt"
-  "os"
-  "github.com/joho/godotenv"
-  "gorm.io/driver/mysql"
-  "gorm.io/gorm"
+	"os"
 
+	"github.com/joho/godotenv"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
 func ConnectDatabase() {
 
-  err := godotenv.Load(".env")
+	err := godotenv.Load(".env")
 
-  if err!=nil {
-    panic("Error loading .env file")
-  }
+	if err != nil {
+		panic("Error loading .env file")
+	}
 
-  dbHost:=os.Getenv("DB_HOST")
-  dbPort:=os.Getenv("DB_PORT")
-  dbUsername:=os.Getenv("DB_USER")
-  dbPassword:=os.Getenv("DB_PASS")
-  dbName:=os.Getenv("DB_NAME")
-  connectionString:=dbUsername+":"+dbPassword+"@tcp("+dbHost+":"+dbPort+")/"+dbName+"?charset=utf8mb4&parseTime=True&loc=Local"
-  
-  fmt.Println(connectionString)
-  database, err := gorm.Open(mysql.Open(connectionString), &gorm.Config{})
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	dbUsername := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASS")
+	dbName := os.Getenv("DB_NAME")
+	connectionString := dbUsername + ":" + dbPassword + "@tcp(" + dbHost + ":" + dbPort + ")/" + dbName + "?charset=utf8mb4&parseTime=True&loc=Local"
 
-  if err != nil {
-    panic("Failed to connect to database!")
-  }
+	fmt.Println(connectionString)
+	database, err := gorm.Open(mysql.Open(connectionString), &gorm.Config{})
 
-  database.AutoMigrate(&Todo{})
+	if err != nil {
+		panic("Failed to connect to database!")
+	}
 
-  DB = database
+	database.AutoMigrate(&Todo{})
+
+	DB = database
 }

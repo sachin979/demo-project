@@ -7,9 +7,9 @@ import (
 	"strings"
 	"todo/models"
 	"todo/services"
+
 	"github.com/gin-gonic/gin"
 )
-
 type Handler struct {
 	TodoService services.ITodoService
 }
@@ -52,22 +52,18 @@ func (h *Handler) CreateTodo(c *gin.Context) {
 func (h *Handler) GetTodo(c *gin.Context) {
 	fmt.Println(c.Param("id"))
 	id, _ := strconv.Atoi(c.Param("id"))
-	todo, err:= h.TodoService.Get(id)
-
+	todo, err := h.TodoService.Get(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 
 		return
 	}
-
 	c.JSON(200, gin.H{"data": todo})
 }
 
 func (h *Handler) PutTodo(c *gin.Context) {
-	 id, _ := strconv.Atoi(c.Param("id"))
-
+	id, _ := strconv.Atoi(c.Param("id"))
 	var form models.PutTodoInput
-
 	c.Bind(&form)
 	todo, err := h.TodoService.Put(&form, id)
 	if err != nil {
@@ -80,10 +76,8 @@ func (h *Handler) PutTodo(c *gin.Context) {
 
 func (h *Handler) PatchTodo(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-
 	var form models.PatchTodoInput
 	c.Bind(&form)
-
 	todoDto, err := h.TodoService.Patch(&form, id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

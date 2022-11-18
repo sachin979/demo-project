@@ -1,12 +1,14 @@
 package config
 
 import (
+	"log"
 	"todo/services"
+
+	"github.com/gin-gonic/gin"
 	"github.com/joeshaw/envdecode"
 	"github.com/joho/godotenv"
 	"gorm.io/gorm"
-	"github.com/gin-gonic/gin"
-	"log")
+)
 
 type DbConf struct {
 	Host     string `env:"DB_HOST,required"`
@@ -17,32 +19,28 @@ type DbConf struct {
 }
 
 type Conf struct {
-	Server          serverConf
-	Db              DbConf
+	Server serverConf
+	Db     DbConf
 }
 
 type serverConf struct {
-	Port         string        `env:"SERVER_PORT,required"`
+	Port string `env:"SERVER_PORT,required"`
 }
 
 type AppConfig struct {
-	Dbs      *Dbs
-	Router   *gin.Engine
-	Cfg      *Conf
+	Dbs    *Dbs
+	Router *gin.Engine
+	Cfg    *Conf
 }
 
 type Dbs struct {
-	DB    *gorm.DB
+	DB *gorm.DB
 }
-
-
 
 type HandlerConfig struct {
 	R           *gin.Engine
 	TodoService services.ITodoService
 }
-
-
 
 func init() {
 	err := godotenv.Load()
@@ -50,7 +48,6 @@ func init() {
 		log.Println(".env file not loaded")
 	}
 }
-
 
 func AppConfigF() *Conf {
 	var c Conf
